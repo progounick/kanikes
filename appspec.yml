@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: /your-app-directory/my-file.txt
+  - source: test.txt
     destination: /home/ubuntu/deployed-files/
 
 hooks:
