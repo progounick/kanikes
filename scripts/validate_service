@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Variables
+SERVICE_NAME="algotech-platform.service"
+PORT=6644                    
+MAX_RETRIES=5
+SLEEP_INTERVAL=5
+
+# Check if the jar file is running
+if pgrep -f $SERVICE_NAME > /dev/null; then
+    echo "$SERVICE_NAME is running."
+else
+    echo "ERROR: $SERVICE_NAME is not running."
+    exit 1
+fi
+
+# Optional: Check if the service is responding on a specific port
+RETRIES=0
+while [[ $RETRIES -lt $MAX_RETRIES ]]; do
+    if nc -zv localhost $PORT > /dev/null 2>&1; then
+        echo "Service is responding on port $PORT."
+        exit 0
+    else
+        echo "Service not yet responding on port $PORT. Retrying in $SLEEP_INTERVAL seconds..."
+        sleep $SLEEP_INTERVAL
+        ((RETRIES++))
+    fi
+done
+
+echo "ERROR: Service did not start or respond on port $PORT after $MAX_RETRIES retries."
+exit 1
