@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       remote-machine:
-        required: true
+        required: false
         type: string
         description: Remote machine address
       phase:
