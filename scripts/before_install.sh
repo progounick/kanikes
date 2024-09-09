@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables
-DEPLOY_DIR="/home/ubuntu/deploy"
-BACKUP_DIR="/home/ubuntu/backups"
+DEPLOY_DIR="/opt/algotech/platform"
+BACKUP_DIR="/opt/algotech/backups"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="$BACKUP_DIR/deploy_backup_$TIMESTAMP.zip"
 
