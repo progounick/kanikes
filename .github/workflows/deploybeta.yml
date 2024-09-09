@@ -64,7 +64,7 @@ jobs:
       - name: Copy jar and config files to deployment directory
         run: |
           cp build/libs/*.jar deploy/
-          cp -r path/to/configs/* deploy/
+          cp .algotech/config/microservices/entrypoint.sh deploy/
 
       - name: Zip the deployment package
         run: zip -r deploy.zip deploy/
