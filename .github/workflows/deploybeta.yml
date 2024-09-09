@@ -56,11 +56,36 @@ jobs:
         run: ./gradlew -Pbet.algotech.deploying=yes build-tag && gradle --stop
       - name: Build with Gradle
         run: ./gradlew build -Pbet.algotech.deploying=yes && gradle --stop
-      - uses: ./.github/actions/run-playbook
+
+
+      - name: Create deployment directory
+        run: mkdir -p deploy
+
+      - name: Copy jar and config files to deployment directory
+        run: |
+          cp build/libs/*.jar deploy/
+          cp -r path/to/configs/* deploy/
+
+      - name: Zip the deployment package
+        run: zip -r deploy.zip deploy/
+
+      - name: Upload to S3
+        uses: aws-actions/s3-sync-action@v1
         with:
-          playbook: deploy-book.yml
-          #          remote-user: ${{ inputs.remote-user }}
-          remote-machine: ${{ inputs.remote-machine }}
-          remote-secret: ${{ secrets.PLATFORM_PRIVATE_KEY }}
-          microservice: ${{ inputs.microservice }}
-          phase: ${{ inputs.phase }}
+          args: deploy.zip s3://your-s3-bucket-name/deployments/
+
+
+
+
+
+
+
+
+#      - uses: ./.github/actions/run-playbook
+#        with:
+#          playbook: deploy-book.yml
+#          #          remote-user: ${{ inputs.remote-user }}
+#          remote-machine: ${{ inputs.remote-machine }}
+#          remote-secret: ${{ secrets.PLATFORM_PRIVATE_KEY }}
+#          microservice: ${{ inputs.microservice }}
+#          phase: ${{ inputs.phase }}
