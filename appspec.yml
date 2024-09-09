@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: test.txt
-    destination: /home/ubuntu/deployed-files/
+    destination: /opt/algotech/platform
 
 hooks:
   BeforeInstall:
