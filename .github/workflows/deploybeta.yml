@@ -65,6 +65,7 @@ jobs:
         run: |
           cp build/libs/*.jar deploy/
           cp .algotech/config/microservices/entrypoint.sh deploy/
+          #we need also the scripts folder and the appspec.yml in the zip
 
       - name: Zip the deployment package
         run: zip -r deploy.zip deploy/
