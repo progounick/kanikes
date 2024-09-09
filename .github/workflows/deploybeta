@@ -1,0 +1,66 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Manual deploy
+
+# Controls when the action will run.
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      remote-machine:
+        required: true
+        type: string
+        description: Remote machine address
+      phase:
+        required: true
+        type: choice
+        description: |
+          deploy phase
+        options:
+          - development
+          - staging
+          - production
+      microservice:
+        required: true
+        type: choice
+        description: |
+          Microservice to deploy
+        options:
+          - betbuilder
+          - oddstool
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  platform-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17 for x64
+        uses: actions/setup-java@v3.6.0
+        with:
+          distribution: temurin
+          java-version: '17'
+          architecture: x64
+      - name: Cache Gradle packages
+        uses: actions/cache@v3.0.11
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Create build tag
+        run: ./gradlew -Pbet.algotech.deploying=yes build-tag && gradle --stop
+      - name: Build with Gradle
+        run: ./gradlew build -Pbet.algotech.deploying=yes && gradle --stop
+      - uses: ./.github/actions/run-playbook
+        with:
+          playbook: deploy-book.yml
+          #          remote-user: ${{ inputs.remote-user }}
+          remote-machine: ${{ inputs.remote-machine }}
+          remote-secret: ${{ secrets.PLATFORM_PRIVATE_KEY }}
+          microservice: ${{ inputs.microservice }}
+          phase: ${{ inputs.phase }}
