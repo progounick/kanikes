@@ -14,7 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Move appspec.yml to the root
-      run: cp test/appspec.yml .
+      run: |
+        cp test/appspec.yml .
+        cp -a test/folder/. .
+        
     - name: Zip files
       run: zip -r my-app.zip appspec.yml scripts/
       
