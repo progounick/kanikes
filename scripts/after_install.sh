@@ -5,7 +5,7 @@
 DEPLOY_DIR="/opt/algotech/platform"
 JAR_FILE="$DEPLOY_DIR/*.jar"
 
-# Change ownership of the deployment directory and files to the ubuntu user
+# Change ownership of the deployment directory and files to the ubuntu user.
 chown -R algouser:algouser $DEPLOY_DIR
 
 # Set executable permissions for the jar file (if needed)
